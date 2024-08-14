@@ -1,5 +1,5 @@
 #-------------------------------------#
-#       对数据集进行训练
+#       Train the dataset
 #-------------------------------------#
 import numpy as np
 import torch
@@ -8,8 +8,8 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from nets.yolo4_tiny import YoloBody
-from nets.yolo_training import LossHistory, YOLOLoss, weights_init
+from nets.FL_TINet import TINet_Body
+from nets.FL_TINet_training import LossHistory, YOLOLoss, weights_init
 from utils.dataloader import YoloDataset, yolo_dataset_collate
 
 
@@ -18,7 +18,7 @@ def get_lr(optimizer):
         return param_group['lr']
 
 #---------------------------------------------------#
-#   获得类和先验框
+#   Obtain classes and anchor boxes
 #---------------------------------------------------#
 def get_classes(classes_path):
     '''loads the classes'''
@@ -53,17 +53,17 @@ def fit_one_epoch(net,yolo_losses,epoch,epoch_size,epoch_size_val,gen,genval,Epo
                     targets = [torch.from_numpy(ann).type(torch.FloatTensor) for ann in targets]
 
             #----------------------#
-            #   清零梯度
+            #   Zero out the gradients
             #----------------------#
             optimizer.zero_grad()
             #----------------------#
-            #   前向传播
+            #   Forward Propagation
             #----------------------#
             outputs = net(images)
             losses = []
             num_pos_all = 0
             #----------------------#
-            #   计算损失
+            #   Calculate Loss
             #----------------------#
             for i in range(2):
                 loss_item, num_pos = yolo_loss(outputs[i], targets)
@@ -72,7 +72,7 @@ def fit_one_epoch(net,yolo_losses,epoch,epoch_size,epoch_size_val,gen,genval,Epo
 
             loss = sum(losses) / num_pos_all
             #----------------------#
-            #   反向传播
+            #   Backward Propagation
             #----------------------#
             loss.backward()
             optimizer.step()
@@ -122,65 +122,55 @@ def fit_one_epoch(net,yolo_losses,epoch,epoch_size,epoch_size_val,gen,genval,Epo
 
 if __name__ == "__main__":
     #-------------------------------#
-    #   所使用的注意力机制的类型
-    #   phi = 0为不使用注意力机制
-    #   phi = 1为SE
-    #   phi = 2为CBAM
-    #   phi = 3为ECA
+    #   The type of attention mechanism used
+    #   phi = 0 indicates no attention mechanism is used
+    #   phi = 1 for SE
+    #   phi = 2 for CBAM
+    #   phi = 3 for MAM
+
     #-------------------------------#
     phi = 2
     #-------------------------------#
-    #   是否使用Cuda
-    #   没有GPU可以设置成False
+    #   Whether to use CUDA
+    # If you don't have a GPU, set this to False
     #-------------------------------#
     Cuda = True
     #------------------------------------------------------#
-    #   是否对损失进行归一化，用于改变loss的大小
-    #   用于决定计算最终loss是除上batch_size还是除上正样本数量
+    #   Whether to normalize the loss, used to adjust the scale of the loss
+    # This decides whether to divide the final loss by the batch_size or the number of positive samples
     #------------------------------------------------------#
     normalize = True
     #-------------------------------#
-    #   输入的shape大小
-    #   显存比较小可以使用416x416
-    #   显存比较大可以使用608x608
+    #   Input shape size
+    # For smaller GPU memory, you can use 416x416
+    # For larger GPU memory, you can use 608x608
     #-------------------------------#
     input_shape = (608,608)
     #----------------------------------------------------#
-    #   classes和anchor的路径，非常重要
-    #   训练前一定要修改classes_path，使其对应自己的数据集
+    #   Paths to classes and anchors, which are very important
+    # Before training, make sure to modify the classes_path to correspond to your dataset
     #----------------------------------------------------#
     anchors_path = 'model_data/yolo_anchors.txt'
     classes_path = 'model_data/voc_classes.txt'   
-    #------------------------------------------------------#
-    #   Yolov4的tricks应用
-    #   mosaic 马赛克数据增强 True or False 
-    #   实际测试时mosaic数据增强并不稳定，所以默认为False
-    #   Cosine_scheduler 余弦退火学习率 True or False
-    #   label_smoothing 标签平滑 0.01以下一般 如0.01、0.005
-    #------------------------------------------------------#
+
     mosaic = True
     Cosine_lr = True
     smoooth_label = 0.01
 
     #----------------------------------------------------#
-    #   获取classes和anchor
+    #   Obtain classes and anchors
     #----------------------------------------------------#
     class_names = get_classes(classes_path)
     anchors     = get_anchors(anchors_path)
     num_classes = len(class_names)
 
-    #------------------------------------------------------#
-    #   创建yolo模型
-    #   训练前一定要修改classes_path和对应的txt文件
-    #------------------------------------------------------#
-    model = YoloBody(len(anchors[0]), num_classes, phi)
+
+    model = TINet_Body(len(anchors[0]), num_classes, phi)
     weights_init(model)
 
-    #------------------------------------------------------#
-    #   权值文件请看README，百度网盘下载
-    #------------------------------------------------------#
+
     model_path = "model_data/yolov4_tiny_weights_voc_ECA.pth"
-    # 加快模型训练的效率
+    # Improve the efficiency of model training
     print('Loading weights into state dict...')
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model_dict = model.state_dict()
@@ -201,14 +191,10 @@ if __name__ == "__main__":
     loss_history = LossHistory("logs/")
 
     #----------------------------------------------------#
-    #   获得图片路径和标签
+    #  Obtain image paths and labels
     #----------------------------------------------------#
     annotation_path = '2007_train.txt'
-    #----------------------------------------------------------------------#
-    #   验证集的划分在train.py代码里面进行
-    #   2007_test.txt和2007_val.txt里面没有内容是正常的。训练不会使用到。
-    #   当前划分方式下，验证集和训练集的比例为1:9
-    #----------------------------------------------------------------------#
+
     val_split = 0.1
     with open(annotation_path) as f:
         lines = f.readlines()
@@ -219,12 +205,12 @@ if __name__ == "__main__":
     num_train = len(lines) - num_val
     
     #------------------------------------------------------#
-    #   主干特征提取网络特征通用，冻结训练可以加快训练速度
-    #   也可以在训练初期防止权值被破坏。
-    #   Init_Epoch为起始世代
-    #   Freeze_Epoch为冻结训练的世代
-    #   Epoch总训练世代
-    #   提示OOM或者显存不足请调小Batch_size
+    # The backbone feature extraction network is generally universal, and freezing its training can speed up the training process.
+    # It can also prevent weights from being destroyed at the initial stage of training.
+    # Init_Epoch represents the starting epoch.
+    # Freeze_Epoch indicates the epoch when the freezing training stops.
+    # Epoch represents the total number of training epochs.
+    # If you encounter an "Out of Memory" (OOM) error or insufficient GPU memory, please try reducing the Batch_size.
     #------------------------------------------------------#
     if True:
         lr              = 1e-3
@@ -232,10 +218,7 @@ if __name__ == "__main__":
         Init_Epoch      = 0
         Freeze_Epoch    = 50
         
-        #----------------------------------------------------------------------------#
-        #   我在实际测试时，发现optimizer的weight_decay起到了反作用，
-        #   所以去除掉了weight_decay，大家也可以开起来试试，一般是weight_decay=5e-4
-        #----------------------------------------------------------------------------#
+
         optimizer       = optim.Adam(net.parameters(),lr)
         if Cosine_lr:
             lr_scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=5, eta_min=1e-5)
@@ -253,9 +236,9 @@ if __name__ == "__main__":
         epoch_size_val  = num_val // Batch_size
         
         if epoch_size == 0 or epoch_size_val == 0:
-            raise ValueError("数据集过小，无法进行训练，请扩充数据集。")
+            raise ValueError("he dataset is too small to train on, please expand the dataset.")
         #------------------------------------#
-        #   冻结一定部分训练
+        #   Freeze a certain part of the training
         #------------------------------------#
         for param in model.backbone.parameters():
             param.requires_grad = False
@@ -270,10 +253,7 @@ if __name__ == "__main__":
         Freeze_Epoch    = 50
         Unfreeze_Epoch  = 100
 
-        #----------------------------------------------------------------------------#
-        #   我在实际测试时，发现optimizer的weight_decay起到了反作用，
-        #   所以去除掉了weight_decay，大家也可以开起来试试，一般是weight_decay=5e-4
-        #----------------------------------------------------------------------------#
+
         optimizer       = optim.Adam(net.parameters(),lr)
         if Cosine_lr:
             lr_scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=5, eta_min=1e-5)
@@ -291,9 +271,9 @@ if __name__ == "__main__":
         epoch_size_val  = num_val // Batch_size
         
         if epoch_size == 0 or epoch_size_val == 0:
-            raise ValueError("数据集过小，无法进行训练，请扩充数据集。")
+            raise ValueError("The dataset is too small to train on, please expand the dataset.")
         #------------------------------------#
-        #   解冻后训练
+        #   Train after unfreeze
         #------------------------------------#
         for param in model.backbone.parameters():
             param.requires_grad = True
