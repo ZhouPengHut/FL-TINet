@@ -65,9 +65,9 @@ class cbam_block(nn.Module):
         x = x*self.spatialattention(x)
         return x
 
-class eca_block(nn.Module):
+class mam_block(nn.Module):
     def __init__(self, channel, b=1, gamma=2):
-        super(eca_block, self).__init__()
+        super(mam_block, self).__init__()
         kernel_size = int(abs((math.log(channel, 2) + b) / gamma))
         kernel_size = kernel_size if kernel_size % 2 else kernel_size + 1
         
