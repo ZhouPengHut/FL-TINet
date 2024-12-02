@@ -1,0 +1,38 @@
+<annotation>
+	<folder>image</folder>
+	<filename>998.jpg</filename>
+	<path>D:\Deep Learning\TrainDataset\dataset\train\image\998.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1400</width>
+		<height>1024</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>normal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>65</xmin>
+			<ymin>646</ymin>
+			<xmax>293</xmax>
+			<ymax>879</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>locking plate</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1142</xmin>
+			<ymin>645</ymin>
+			<xmax>1366</xmax>
+			<ymax>899</ymax>
+		</bndbox>
+	</object>
+</annotation>
