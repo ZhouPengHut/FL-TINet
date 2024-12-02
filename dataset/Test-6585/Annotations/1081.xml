@@ -1,0 +1,38 @@
+<annotation>
+	<folder>image</folder>
+	<filename>1081.jpg</filename>
+	<path>D:\Deep Learning\TrainDataset\dataset\train\image\1081.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1400</width>
+		<height>1024</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>normal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>40</xmin>
+			<ymin>695</ymin>
+			<xmax>264</xmax>
+			<ymax>907</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>normal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1115</xmin>
+			<ymin>690</ymin>
+			<xmax>1347</xmax>
+			<ymax>908</ymax>
+		</bndbox>
+	</object>
+</annotation>
