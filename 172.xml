@@ -1,0 +1,26 @@
+<annotation>
+	<folder>Original picture</folder>
+	<filename>172.jpg</filename>
+	<path>D:\Deep Learning\TrainDataset\Image\truncated pIug door handIe\Original picture\172.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1400</width>
+		<height>1024</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>normal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>637</xmin>
+			<ymin>696</ymin>
+			<xmax>717</xmax>
+			<ymax>797</ymax>
+		</bndbox>
+	</object>
+</annotation>
