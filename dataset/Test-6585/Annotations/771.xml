@@ -1,0 +1,38 @@
+<annotation>
+	<folder>Fault picture</folder>
+	<filename>771.jpg</filename>
+	<path>D:\Deep Learning\TrainDataset\Image\Locking plate\Fault picture\771.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1400</width>
+		<height>1024</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>normal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>61</xmin>
+			<ymin>600</ymin>
+			<xmax>270</xmax>
+			<ymax>826</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>Locking plate</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1041</xmin>
+			<ymin>616</ymin>
+			<xmax>1252</xmax>
+			<ymax>828</ymax>
+		</bndbox>
+	</object>
+</annotation>
