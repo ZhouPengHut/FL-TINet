@@ -1,0 +1,38 @@
+<annotation>
+	<folder>锁紧板</folder>
+	<filename>815.jpg</filename>
+	<path>D:\Deep Learning\TrainDataset\Image\锁紧板\原图\锁紧板\815.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1400</width>
+		<height>1024</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>normal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>51</xmin>
+			<ymin>692</ymin>
+			<xmax>276</xmax>
+			<ymax>915</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>normal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1110</xmin>
+			<ymin>688</ymin>
+			<xmax>1342</xmax>
+			<ymax>912</ymax>
+		</bndbox>
+	</object>
+</annotation>
