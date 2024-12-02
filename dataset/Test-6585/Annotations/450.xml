@@ -1,0 +1,38 @@
+<annotation>
+	<folder>Original picture</folder>
+	<filename>450.jpg</filename>
+	<path>D:\Deep Learning\TrainDataset\Image\Upper lever\Original picture\450.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1400</width>
+		<height>1024</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>normal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>498</xmin>
+			<ymin>491</ymin>
+			<xmax>550</xmax>
+			<ymax>577</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>normal</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1109</xmin>
+			<ymin>335</ymin>
+			<xmax>1161</xmax>
+			<ymax>472</ymax>
+		</bndbox>
+	</object>
+</annotation>
