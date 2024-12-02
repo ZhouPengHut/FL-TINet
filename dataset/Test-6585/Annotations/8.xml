@@ -1,0 +1,26 @@
+<annotation>
+	<folder>image</folder>
+	<filename>8.jpg</filename>
+	<path>D:\Deep Learning\TrainDataset\dataset\train\image\8.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1400</width>
+		<height>1024</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>truncated plug door handle</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>46</xmin>
+			<ymin>515</ymin>
+			<xmax>243</xmax>
+			<ymax>637</ymax>
+		</bndbox>
+	</object>
+</annotation>
