@@ -1,0 +1,26 @@
+<annotation>
+	<folder>image</folder>
+	<filename>239.jpg</filename>
+	<path>D:\Deep Learning\TrainDataset\dataset\train\image\239.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1400</width>
+		<height>1024</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>upper lever</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1148</xmin>
+			<ymin>93</ymin>
+			<xmax>1190</xmax>
+			<ymax>295</ymax>
+		</bndbox>
+	</object>
+</annotation>
